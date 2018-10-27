@@ -1,0 +1,12 @@
+.settings/
+bin/
+build/
+.project
+.classpath
+/.metadata
+/.recommenders
+/mina
+/RemoteSystemsTempFiles
+/Servers
+
+*.class

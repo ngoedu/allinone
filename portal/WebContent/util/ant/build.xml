@@ -1,0 +1,56 @@
+<project name="Portal DEV Ant Deployer" default="Portal.ftp.all" basedir=".">
+
+	<property file="build.properties" />
+
+	<path id="ngo-ant-classpath">
+		<fileset dir="${tomcat.home}/lib">
+			<include name="catalina-ant.jar" />
+			<include name="tomcat-coyote.jar" />
+			<include name="tomcat-util.jar" />
+		</fileset>
+		<fileset dir="${util.root}">
+			<include name="commons-net-1.4.1.jar" />
+			<include name="jakarta-oro-2.0.8.jar" />
+		</fileset>
+		<fileset dir="${tomcat.home}/bin">
+			<include name="tomcat-juli.jar" />
+		</fileset>
+	</path>
+
+	
+	
+	<!--default-->
+	<target name="ngo.echo">
+		<echo message="${project.name} ${project.ver},  basedir=${basedir}, project.root=${project.root}" />
+	</target>
+
+	<target name="Portal.ftp.deleteAll" description="remove all resources from remote web server" depends="">
+		<ftp action="del" 
+		       server="${portal.ftp.ip}"
+				remotedir="${portal.ftp.dir}"
+		       userid="${portal.ftp.user}"
+		       password="${portal.ftp.pass}"  passive="yes"  depends="no"  binary="yes" verbose="yes">
+		    <fileset>
+		      <include name="**/*.html"/>
+		      <include name="**/*.js"/>
+		      <include name="**/*.css"/>
+		      <include name="**/*.png"/>
+		    </fileset>
+		  </ftp>
+	</target>
+			
+	<target name="Portal.ftp.all" description="upload all resources to remote web server" depends="Portal.ftp.deleteAll">
+		<ftp server="${portal.ftp.ip}"
+			   remotedir="${portal.ftp.dir}"
+			   userid="${portal.ftp.user}"
+			   password="${portal.ftp.pass}"
+			   passive="yes"  depends="no"  binary="yes" verbose="yes">
+			<fileset dir="${project.root}">
+				<exclude name="WEB-INF/src/**"/>
+				<exclude name="util/**" />
+			</fileset>
+		</ftp>
+	</target>
+	
+	
+</project>
