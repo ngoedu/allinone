@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ngo.front.web.service.CourseService;
+
  
 /**
 	NGO Kids Math Resource request controller	 
@@ -30,45 +32,47 @@ public class CourseControler {
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
 	
-	private final static String FILE_PATH = "/cmeta";
+	private final static String FILE_PATH = "/cmeta/dat.js";
+	
+	@Autowired
+    private CourseService courseService;
     
     @RequestMapping(value = "/json/course", method = RequestMethod.GET)
     public void request(HttpServletRequest request, HttpServletResponse response, @RequestParam("key") String key, @RequestParam("token") String token) {
         try {
         	//validate token here
-        	if (!isTokenValidated(token))
+        	if (!isTokenValidated(token)) {
         		response.sendError(response.SC_BAD_REQUEST);
-        	
+        		return;
+        	}
         	//get latest key of course meta info
-        	String courseMetaKey = "";
+        	String courseMetaKey = courseService.getCourseMetaInfo();
         	if (key.equals(courseMetaKey)) {
         		response.sendError(response.SC_NOT_MODIFIED);
         	} else {
         		String downloadFile = request.getServletContext().getRealPath(FILE_PATH);
         		InputStream inputStream = new FileInputStream(downloadFile);
+        		
 
     			// Write response
+        		response.setCharacterEncoding("utf-8");
+        		response.setContentType("text/javascript; charset=utf-8"); 
     			OutputStream outStream = response.getOutputStream();
     			IOUtils.copy(inputStream, outStream);
 	    	    response.flushBuffer();
         	}
         } catch (Exception e) {
         	logger.error(e.getMessage());
-        	try {
-				response.sendError(response.SC_INTERNAL_SERVER_ERROR);
-			} catch (IOException e1) {
-				//ignore it.
-			}
         }
     }
     
     private boolean isTokenValidated(String token) {
     	int idx0, idx1, idx2;
-    	idx0 = token.charAt(0);
-    	idx1 = token.charAt(1);
-    	idx2 = token.charAt(2);
-    	return (token.charAt(idx0) == 'N' && token.charAt(idx1)== 'G' && token.charAt(idx2) =='O');
-        	
+    	idx0 = token.charAt(0) - 48;
+    	idx1 = token.charAt(1) - 48;
+    	idx2 = token.charAt(2) - 48;
+    	boolean result =  token.charAt(idx0) == (char)'N'&& token.charAt(idx1) == (char)'G'&& token.charAt(idx2) == (char)'O';
+        return result;
     }
 }
 

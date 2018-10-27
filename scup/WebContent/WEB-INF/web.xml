@@ -74,7 +74,7 @@
 
 	<servlet-mapping>
 		<servlet-name>spring-dispatcher</servlet-name>
-		<url-pattern>/json/resource</url-pattern>	
+		<url-pattern>/json/course</url-pattern>	
 	</servlet-mapping>
 
 	<servlet-mapping>
@@ -100,7 +100,7 @@
 	 
 	 <login-config>
 	    <auth-method>BASIC</auth-method>
-	    <realm-name>NGO.km realm</realm-name>
+	    <realm-name>NGO realm</realm-name>
 	  </login-config>
  
 	 <!-- Security roles referenced by this web application -->
