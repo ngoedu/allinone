@@ -8,5 +8,5 @@ build/
 /mina
 /RemoteSystemsTempFiles
 /Servers
-
+*.jar
 *.class
