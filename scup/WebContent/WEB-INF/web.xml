@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" metadata-complete="true" version="3.1">
+  <display-name>scup</display-name>
+  <description>NGO System and Course Upgrade Site</description>
+
+   	<context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/spring/applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+    	<listener-class>net.bull.javamelody.SessionListener</listener-class>
+  	</listener>
+   
+	<filter>
+		<filter-name>javamelody</filter-name>
+		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+
+	<filter>
+		<filter-name>GzipHeaderFilter</filter-name>
+		<filter-class>ngo.front.web.filter.GzipHeaderFilter</filter-class>
+		<init-param>
+			<param-name>headers</param-name>
+			<param-value>Content-Encoding=gzip</param-value>
+		</init-param>
+	</filter>
+  
+  	<!-- QoS filter here -->
+	
+	<filter-mapping>
+		<filter-name>GzipHeaderFilter</filter-name>
+		<url-pattern>*.ngjs</url-pattern>
+		<url-pattern>*.ngpng</url-pattern>
+		<url-pattern>*.ngcss</url-pattern>
+	</filter-mapping>
+	
+	
+	<filter-mapping>
+		<filter-name>javamelody</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>ASYNC</dispatcher>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>spring-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>WEB-INF/spring/dispatcherServlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>spring-dispatcher</servlet-name>
+		<url-pattern>/json/resource</url-pattern>	
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.ngdom</url-pattern>
+		<url-pattern>*.ngjs</url-pattern>
+		<url-pattern>*.ngcss</url-pattern>
+		<url-pattern>*.ngmp3</url-pattern>
+		<url-pattern>*.ngpng</url-pattern>
+		<url-pattern>/monitoring</url-pattern> 
+	</servlet-mapping>
+  
+	<security-constraint>
+	   <web-resource-collection>
+	     <web-resource-name>NGO Text Script Manager interface</web-resource-name>
+	     <url-pattern>/ants/*</url-pattern>
+	     <url-pattern>/monitoring</url-pattern>    
+	   </web-resource-collection>
+	   <auth-constraint>
+	      <role-name>ants-script</role-name>
+	   </auth-constraint>
+	 </security-constraint>
+	 
+	 <login-config>
+	    <auth-method>BASIC</auth-method>
+	    <realm-name>NGO.km realm</realm-name>
+	  </login-config>
+ 
+	 <!-- Security roles referenced by this web application -->
+	  <security-role>
+	    <description>
+	      The role that is required to access the ngo base management interfaces
+	    </description>
+	    <role-name>ants-script</role-name>
+	  </security-role>
+    
+  <error-page>
+    <error-code>401</error-code>
+    <location>/WEB-INF/jsp/401.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>403</error-code>
+    <location>/WEB-INF/jsp/403.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/WEB-INF/jsp/404.jsp</location>
+  </error-page>
+  
+  <mime-mapping>
+    <extension>ngdom</extension>
+    <mime-type>text/html</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+    <extension>ngjs</extension>
+    <mime-type>application/javascript</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+    <extension>ngcss</extension>
+    <mime-type>text/css</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+    <extension>ngmp3</extension>
+    <mime-type>audio/mpeg</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+    <extension>ngpng</extension>
+    <mime-type>text/base64</mime-type>
+  </mime-mapping>
+</web-app>
