@@ -1,6 +1,6 @@
 <project name="Portal DEV Ant Deployer" default="Portal.ftp.all" basedir=".">
 
-	<property file="build.properties" />
+	<property file="build_dev.properties" />
 
 	<path id="ngo-ant-classpath">
 		<fileset dir="${tomcat.home}/lib">

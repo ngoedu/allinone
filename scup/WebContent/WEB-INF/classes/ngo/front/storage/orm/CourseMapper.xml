@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ngo.front.storage.orm.CourseMapper">
+	
+	<select id="getMetaInfo" resultType="ngo.front.storage.entity.Course">
+		select name,ver,url,md5,grade,module,category,lorder from course 
+	</select>
+
+	
+	<update id="update" parameterType="ngo.front.storage.entity.Course">
+        update course set md5=#{md5},ver=#{ver},grade=#{grade},module=#{module},lorder=#{lorder},category=#{category} where name=#{name}
+    </update>
+    
+    <insert id="insert" parameterType="ngo.front.storage.entity.Course" useGeneratedKeys="true" keyProperty="rid">
+        insert into course(name,ver,url,md5,grade,module,lorder,category) values(#{name},#{ver},#{url},#{md5},#{grade},#{module},#{lorder},#{category})
+    </insert>
+    
+</mapper>

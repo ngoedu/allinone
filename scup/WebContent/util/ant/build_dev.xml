@@ -1,0 +1,69 @@
+<project name="System and Course Upgrade DEV Ant Deployer" default="" basedir=".">
+
+	<property file="build_dev.properties" />
+
+	<path id="ngo-ant-classpath">
+		<fileset dir="${tomcat.home}/lib">
+			<include name="catalina-ant.jar" />
+			<include name="tomcat-coyote.jar" />
+			<include name="tomcat-util.jar" />
+		</fileset>
+		<fileset dir="${util.root}">
+			<include name="commons-net-1.4.1.jar" />
+			<include name="jakarta-oro-2.0.8.jar" />
+		</fileset>
+		<fileset dir="${tomcat.home}/bin">
+			<include name="tomcat-juli.jar" />
+		</fileset>
+	</path>
+
+	
+	<!--default-->
+	<target name="ngo.echo">
+		<echo message="${project.name} ${project.ver},  basedir=${basedir}, project.root=${project.root}" />
+	</target>
+	
+	<target name="ngo.stop.scup" description="stop SCUP application from web server" depends="">
+			<get src="${ngo.text.stop.url}" dest="${util.root}/out/ngo.stop.root.log" username="${ngo.script.user}" password="${ngo.script.pass}"/>
+			<loadfile property="ngo.stop.output" srcFile="${util.root}/out/ngo.stop.root.log"/>
+			<echo message="NGO stop SCUP : ${ngo.stop.output}" />
+		</target>
+		
+	<target name="ngo.start.scup" description="start SCUP application from web server" depends="">
+		<get src="${ngo.text.start.url}" dest="${util.root}/out/ngo.start.root.log" username="${ngo.script.user}" password="${ngo.script.pass}"/>
+		<loadfile property="ngo.start.output" srcFile="${util.root}/out/ngo.start.root.log"/>
+		<echo message="NGO start SCUP : ${ngo.start.output}" />
+	</target>
+	
+
+	<target name="ngo.ftp.deleteJava" description="remove all java resources from remote web server" depends="">
+		<ftp action="del" 
+		       server="${ngo.ftp.ip}"
+			   remotedir="${ngo.ftp.dir}"
+		       userid="${ngo.ftp.user}"
+		       password="${ngo.ftp.pass}"  passive="yes"  depends="no"  binary="yes" verbose="yes">
+		    <fileset>
+		      <include name="**/*.class"/>
+		      <include name="**/*.xml"/>
+		      <include name="**/*.properties"/>
+		      <include name="**/*.jar"/>
+		      <include name="**/*.jsp"/>
+		    </fileset>
+		  </ftp>
+		</target>
+			
+	<target name="ngo.ftp.java" description="upload java resources to remote web server" depends="">
+			<ftp server="${ngo.ftp.ip}"
+				   remotedir="${ngo.ftp.dir}"
+				   userid="${ngo.ftp.user}"
+				   password="${ngo.ftp.pass}"
+				   passive="yes"  depends="no"  binary="yes" verbose="yes">
+				<fileset dir="${project.root}">
+					<exclude name="WEB-INF/src/**"/>
+					<exclude name="WEB-INF/sql/**"/>
+					<exclude name="util/**" />
+				</fileset>
+			</ftp>
+		</target>
+	
+</project>
