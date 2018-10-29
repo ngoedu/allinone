@@ -13,8 +13,8 @@ public class CourseDAO {
 	private SqlSessionTemplate sqlSession;
 
 	
-	public Course getMetaInfo() {
-		Course course =  sqlSession.selectOne("ngo.front.storage.orm.CourseMapper.getMetaInfo");
+	public Course getCourseMetaObject() {
+		Course course =  sqlSession.selectOne("ngo.front.storage.orm.CourseMapper.getCourseMeta");
 		return course;
 	}
 	

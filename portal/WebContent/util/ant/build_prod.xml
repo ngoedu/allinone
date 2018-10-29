@@ -1,6 +1,6 @@
-<project name="Portal.PROD Ant Deployer" default="Portal.ftp.all" basedir=".">
+<project name="Portal PROD Ant Deployer" default="Portal.ftp.all" basedir=".">
 
-	<property file="build.properties" />
+	<property file="build_prod.properties" />
 
 	<path id="catalina-ant-classpath">
 		<fileset dir="${tomcat.home}/lib">

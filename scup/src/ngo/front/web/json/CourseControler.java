@@ -38,31 +38,23 @@ public class CourseControler {
     private CourseService courseService;
     
     @RequestMapping(value = "/json/course", method = RequestMethod.GET)
-    public void request(HttpServletRequest request, HttpServletResponse response, @RequestParam("key") String key, @RequestParam("token") String token) {
+    public ResponseEntity<String> request(HttpServletRequest request, HttpServletResponse response, @RequestParam("key") String key, @RequestParam("token") String token) {
         try {
         	//validate token here
-        	if (!isTokenValidated(token)) {
-        		response.sendError(response.SC_BAD_REQUEST);
-        		return;
+        	if (!isTokenValidated(token)) {      		
+        		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid request");
         	}
         	//get latest key of course meta info
-        	String courseMetaKey = courseService.getCourseMetaInfo();
+        	String courseMetaKey = courseService.getCourseMetaKey();
         	if (key.equals(courseMetaKey)) {
-        		response.sendError(response.SC_NOT_MODIFIED);
+        		return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
         	} else {
-        		String downloadFile = request.getServletContext().getRealPath(FILE_PATH);
-        		InputStream inputStream = new FileInputStream(downloadFile);
-        		
-
-    			// Write response
-        		response.setCharacterEncoding("utf-8");
-        		response.setContentType("text/javascript; charset=utf-8"); 
-    			OutputStream outStream = response.getOutputStream();
-    			IOUtils.copy(inputStream, outStream);
-	    	    response.flushBuffer();
+        		String downloadFileUrl = courseService.getCourseMetaFileUrl();
+        		return ResponseEntity.ok(downloadFileUrl);
         	}
         } catch (Exception e) {
         	logger.error(e.getMessage());
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
     

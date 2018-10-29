@@ -33,9 +33,16 @@ public class CourseService implements LocalCache.CachingLoader{
 		logger.info("CourseService registered as caching loader for ["+REG_KEY+"]");				
 	}
 	
-	public String getCourseMetaInfo()
+	public String getCourseMetaKey()
 	{
-    	return (String)localCache.getObject(REG_KEY);	
+    	Course course = (Course)localCache.getObject(REG_KEY);	
+    	return course.getMd5();
+	}
+	
+	public String getCourseMetaFileUrl()
+	{
+    	Course course = (Course)localCache.getObject(REG_KEY);	
+    	return course.getUrl();
 	}
 	
 
@@ -43,11 +50,11 @@ public class CourseService implements LocalCache.CachingLoader{
 	public Object loadCacheObject(String key)  {
 		if (key.equals(REG_KEY))
 		{
-			Resource resource = new Resource(courseDAO.getMetaInfo());
+			Resource resource = new Resource(courseDAO.getCourseMetaObject());
 			localCache.entryVerUp(key, resource.getVersion());
 
 			logger.info("key ["+key+"] loaded from database");			
-			return (Object)courseDAO.getMetaInfo().getMd5();	
+			return courseDAO.getCourseMetaObject();	
 		}
 		return null;
 	}

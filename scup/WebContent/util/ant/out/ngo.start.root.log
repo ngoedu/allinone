@@ -1,1 +1,2 @@
-OK - Started application at context path /scup
+FAIL - Application at context path /scup could not be started
+FAIL - Encountered exception org.apache.catalina.LifecycleException: Failed to start component [StandardEngine[Catalina].StandardHost[localhost].StandardContext[/scup]]

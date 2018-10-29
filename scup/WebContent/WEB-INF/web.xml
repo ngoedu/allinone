@@ -44,7 +44,7 @@
 			<param-value>Content-Encoding=gzip</param-value>
 		</init-param>
 	</filter>
-  
+
   	<!-- QoS filter here -->
 	
 	<filter-mapping>

@@ -2,7 +2,7 @@
 
 	<property file="build_dev.properties" />
 
-	<path id="ngo-ant-classpath">
+	<path id="tomcat-ant-classpath">
 		<fileset dir="${tomcat.home}/lib">
 			<include name="catalina-ant.jar" />
 			<include name="tomcat-coyote.jar" />
@@ -16,11 +16,48 @@
 			<include name="tomcat-juli.jar" />
 		</fileset>
 	</path>
+	
+	<taskdef file="${project.root}/util/ant/tomcatTasks.properties">
+		<classpath refid="tomcat-ant-classpath" />
+	</taskdef>
+	
+	<path id="ngo-ant-classpath">
+			<fileset dir="${project.root}/util/ant/lib">
+				<include name="ngotask.jar" />
+				<include name="ngoweb.jar" />
+				<include name="commons-net-1.4.1.jar" />
+				<include name="jakarta-oro-2.0.8.jar" />
+			</fileset>
+			<fileset dir="${project.root}/WEB-INF/lib">
+				<include name="jackson-core-asl-1.9.13.jar" />
+				<include name="jackson-mapper-lgpl-1.9.13.jar" />
+			</fileset>
+			<fileset dir="${project.root}/util/jsc">
+				<include name="yuicompressor-2.4.8.jar" />
+				<include name="commons-io-2.5.jar" />
+			</fileset>
+			<fileset dir="${project.root}/util/gzip">
+				<include name="commons-compress-1.14.jar" />
+			</fileset>
+			<fileset dir="${project.root}/util/md5">
+				<include name="commons-codec-1.10.jar" />
+			</fileset>
+		</path>
+	
+	
+		
+		<taskdef file="${project.root}/util/ant/ngoTasks.properties">
+			<classpath refid="ngo-ant-classpath" />
+		</taskdef>
 
 	
 	<!--default-->
 	<target name="ngo.echo">
 		<echo message="${project.name} ${project.ver},  basedir=${basedir}, project.root=${project.root}" />
+	</target>
+	
+	<target name="ngo.js.gzip" description="javascript file gzip" depends="">
+			<ngzip include=".*.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}/cmeta" />
 	</target>
 	
 	<target name="ngo.stop.scup" description="stop SCUP application from web server" depends="">
@@ -52,7 +89,7 @@
 		  </ftp>
 		</target>
 			
-	<target name="ngo.ftp.java" description="upload java resources to remote web server" depends="">
+	<target name="ngo.ftp.java" description="upload java resources to remote web server" depends="ngo.ftp.deleteJava">
 			<ftp server="${ngo.ftp.ip}"
 				   remotedir="${ngo.ftp.dir}"
 				   userid="${ngo.ftp.user}"
