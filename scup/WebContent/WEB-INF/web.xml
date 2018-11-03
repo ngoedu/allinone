@@ -91,7 +91,7 @@
 
 	<servlet-mapping>
 		<servlet-name>spring-dispatcher</servlet-name>
-		<url-pattern>/json/course</url-pattern>	
+		<url-pattern>/json/cmeta</url-pattern>	
 	</servlet-mapping>
 
 	<servlet-mapping>
@@ -152,10 +152,6 @@
   <mime-mapping>
     <extension>ngcss</extension>
     <mime-type>text/css</mime-type>
-  </mime-mapping>
-  <mime-mapping>
-    <extension>ngmp3</extension>
-    <mime-type>audio/mpeg</mime-type>
   </mime-mapping>
   <mime-mapping>
     <extension>ngpng</extension>
