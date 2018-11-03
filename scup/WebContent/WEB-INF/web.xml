@@ -30,6 +30,8 @@
     	<listener-class>net.bull.javamelody.SessionListener</listener-class>
   	</listener>
    
+   <!-- FILTERS -->
+   
 	<filter>
 		<filter-name>javamelody</filter-name>
 		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
@@ -44,8 +46,22 @@
 			<param-value>Content-Encoding=gzip</param-value>
 		</init-param>
 	</filter>
+	
+	<filter>
+		<filter-name>CourseDownloadFilter</filter-name>
+		<filter-class>ngo.front.web.filter.CourseDownloadFilter</filter-class>
+		<init-param>
+			<param-name>param1</param-name>
+			<param-value>value1</param-value>
+		</init-param>
+	</filter>
+	
 
   	<!-- QoS filter here -->
+	<filter-mapping>
+		<filter-name>CourseDownloadFilter</filter-name>
+		<url-pattern>/cpack/*</url-pattern>
+	</filter-mapping>
 	
 	<filter-mapping>
 		<filter-name>GzipHeaderFilter</filter-name>
@@ -53,6 +69,7 @@
 		<url-pattern>*.ngpng</url-pattern>
 		<url-pattern>*.ngcss</url-pattern>
 	</filter-mapping>
+	
 	
 	
 	<filter-mapping>
@@ -82,7 +99,7 @@
 		<url-pattern>*.ngdom</url-pattern>
 		<url-pattern>*.ngjs</url-pattern>
 		<url-pattern>*.ngcss</url-pattern>
-		<url-pattern>*.ngmp3</url-pattern>
+		<url-pattern>*.zip</url-pattern>
 		<url-pattern>*.ngpng</url-pattern>
 		<url-pattern>/monitoring</url-pattern> 
 	</servlet-mapping>
@@ -113,15 +130,15 @@
     
   <error-page>
     <error-code>401</error-code>
-    <location>/WEB-INF/jsp/401.jsp</location>
+    <location>/jsp/401.jsp</location>
   </error-page>
   <error-page>
     <error-code>403</error-code>
-    <location>/WEB-INF/jsp/403.jsp</location>
+    <location>/jsp/403.jsp</location>
   </error-page>
   <error-page>
     <error-code>404</error-code>
-    <location>/WEB-INF/jsp/404.jsp</location>
+    <location>/jsp/404.jsp</location>
   </error-page>
   
   <mime-mapping>

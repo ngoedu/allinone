@@ -32,12 +32,13 @@ public class CourseControler {
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
 	
-	private final static String FILE_PATH = "/cmeta/dat.js";
+	private final static String CMETA_FILE_PATH = "/cmeta/dat.js";
+	private final static String CPACK_FILE_PATH = "/cpack/";
 	
 	@Autowired
     private CourseService courseService;
     
-    @RequestMapping(value = "/json/course", method = RequestMethod.GET)
+    @RequestMapping(value = "/json/cmeta", method = RequestMethod.GET)
     public ResponseEntity<String> request(HttpServletRequest request, HttpServletResponse response, @RequestParam("key") String key, @RequestParam("token") String token) {
         try {
         	//validate token here

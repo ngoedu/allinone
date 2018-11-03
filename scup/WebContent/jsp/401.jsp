@@ -16,7 +16,7 @@
  <body>
    <h1>401 Unauthorized</h1>
    <p>
-    You are not authorized to view this page. It must contain the credentials to let you use this!.
+    You are not authorized to access this resource.
    </p>
 
  </body>
