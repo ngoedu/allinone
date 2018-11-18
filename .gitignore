@@ -10,3 +10,4 @@ build/
 /Servers
 *.jar
 *.class
+*.zip

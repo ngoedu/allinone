@@ -57,7 +57,8 @@
 	</target>
 	
 	<target name="ngo.js.gzip" description="javascript file gzip" depends="">
-			<ngzip include=".*.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}/cmeta" />
+		<delete file="${project.root}/cmeta/dat.ngjs"/>			
+		<ngzip include=".*.js" exclude="__NOMATCH__" fileExtension="ngjs" path="${project.root}/cmeta" />
 	</target>
 	
 	<target name="ngo.stop.scup" description="stop SCUP application from web server" depends="">
@@ -85,6 +86,7 @@
 		      <include name="**/*.properties"/>
 		      <include name="**/*.jar"/>
 		      <include name="**/*.jsp"/>
+		    <include name="**/*.zip"/>
 		    </fileset>
 		  </ftp>
 		</target>
@@ -102,5 +104,28 @@
 				</fileset>
 			</ftp>
 		</target>
+	
+	
+	<target name="ngo.localcache.removeAll" description="remove all cache entries from web server" depends="">
+			<get src="${ngo.localcache.removeAll}" dest="${util.root}/out/ngo.cache.log" username="${ngo.base.user}" password="${ngo.base.pass}"/>
+			<loadfile property="ngo.cache.output" srcFile="${util.root}/out/ngo.cache.log"/>
+			<echo message="NGO ${ngo.cache.output}" />
+	</target>
+	
+	<target name="ngo.localcache.preload" description="preload cache entries from web server" depends="">
+		<get src="${ngo.localcache.preload}" dest="${util.root}/out/ngo.cache.preload.log" username="${ngo.base.user}" password="${ngo.base.pass}"/>
+		<loadfile property="ngo.cache.preload.out" srcFile="${util.root}/out/ngo.cache.preload.log"/>
+		<echo message="${ngo.cache.preload.out}" />
+	</target>
+	
+	<target name="ngo.NOC.dist">
+		<antcall target="ngo.stop.scup"/>
+			<antcall target="ngo.js.gzip"/>
+		<antcall target="ngo.ftp.java"/>
+		<antcall target="ngo.start.scup"/>
+		<antcall target="ngo.localcache.removeAll"/>
+		<antcall target="ngo.localcache.preload"/>
+		
+	</target>
 	
 </project>

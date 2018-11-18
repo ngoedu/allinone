@@ -92,6 +92,7 @@
 	<servlet-mapping>
 		<servlet-name>spring-dispatcher</servlet-name>
 		<url-pattern>/json/cmeta</url-pattern>	
+		<url-pattern>/ants/cache</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
