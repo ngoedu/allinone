@@ -105,7 +105,7 @@
 			</ftp>
 		</target>
 	
-	
+	<!-- redis introduced, local cache abolished 
 	<target name="ngo.localcache.removeAll" description="remove all cache entries from web server" depends="">
 			<get src="${ngo.localcache.removeAll}" dest="${util.root}/out/ngo.cache.log" username="${ngo.base.user}" password="${ngo.base.pass}"/>
 			<loadfile property="ngo.cache.output" srcFile="${util.root}/out/ngo.cache.log"/>
@@ -117,15 +117,17 @@
 		<loadfile property="ngo.cache.preload.out" srcFile="${util.root}/out/ngo.cache.preload.log"/>
 		<echo message="${ngo.cache.preload.out}" />
 	</target>
+	-->
 	
 	<target name="ngo.NOC.dist">
 		<antcall target="ngo.stop.scup"/>
 			<antcall target="ngo.js.gzip"/>
 		<antcall target="ngo.ftp.java"/>
 		<antcall target="ngo.start.scup"/>
+		<!-- redis introduced, local cache abolished 
 		<antcall target="ngo.localcache.removeAll"/>
 		<antcall target="ngo.localcache.preload"/>
-		
+		 -->
 	</target>
 	
 </project>

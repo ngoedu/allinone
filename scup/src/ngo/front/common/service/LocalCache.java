@@ -78,7 +78,7 @@ public class LocalCache {
 		if (loader==null)
 			logger.error("key ["+key+"] don't have a caching loader");			
 		else{
-			Object newValue =  loader.loadCacheObject(key);
+			Object newValue =  loader.loadDBMapObject(key);
 			//reset size map
 			entryResize(key, newValue.toString().length());
 			//reset reload status
@@ -258,12 +258,5 @@ public class LocalCache {
 		}
 	}
 	
-	/**
-	 * the class implements this interface hold the implementation of loading the specified caching entry (by key)
-	 * from the storage somewhere, e.g. database. 
-	 * @author Administrator
-	 */
-	public interface CachingLoader {
-		public Object loadCacheObject(String key);
-	}
+	
 }

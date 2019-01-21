@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ngo.front.common.service.LocalCache;
  
 /*
-		 
+	THIS CONTROLLER IS ABLISHED.	 
  **/
 @Controller
 public class CacheControler {

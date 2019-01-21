@@ -42,7 +42,7 @@
           username="ngow"
           password="nG@F0rmW#b"
           driverClassName="com.mysql.cj.jdbc.Driver"
-          url="jdbc:mysql://192.168.0.12:3306/ngodev"/>
+          url="jdbc:mysql://192.168.0.13:3306/ngodev"/>
 	
 
 

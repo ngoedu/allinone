@@ -49,9 +49,10 @@ public class CourseDownloadFilter implements Filter {
 	}
 	
 	private boolean isTokenValidated(String token) {
+		//TODO: add real token check here.
 		if (token != null && token.equals("NGO"))
 			return true;
-		return true;
+		return false;
 	}
 
 }

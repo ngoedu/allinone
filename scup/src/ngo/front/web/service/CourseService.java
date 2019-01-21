@@ -1,60 +1,77 @@
 package ngo.front.web.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ngo.front.common.service.CachingLoader;
+import ngo.front.common.service.JSonService;
+import ngo.front.common.service.JedisCache;
 import ngo.front.common.service.LocalCache;
 import ngo.front.storage.entity.Course;
 import ngo.front.storage.entity.Resource;
 import ngo.front.storage.orm.CourseDAO;
 
 @Service
-public class CourseService implements LocalCache.CachingLoader{
+public class CourseService implements CachingLoader{
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
 	
-	private static final String REG_KEY = "course_meta";
+	private static final String REG_KEY = "course";
 
 	
 	@Autowired
-	private LocalCache localCache;
+	private JedisCache jedisCache;
 	
 	@Autowired
 	private CourseDAO courseDAO;
+	
+	@Autowired
+	private JSonService jsonService;
 	
 	
 	@PostConstruct
 	public void init()
 	{
-		localCache.register(REG_KEY, this);
+		jedisCache.register(REG_KEY, this);
 		logger.info("CourseService registered as caching loader for ["+REG_KEY+"]");				
 	}
 	
 	public String getCourseMetaKey()
 	{
-    	Course course = (Course)localCache.getObject(REG_KEY);	
-    	return course.getMd5();
+    	Map<String,String> course = jedisCache.getHMValue(REG_KEY, "course");	
+    	return course.get("metaKey");
 	}
 	
 	public String getCourseMetaFileUrl()
 	{
-    	Course course = (Course)localCache.getObject(REG_KEY);	
-    	return course.getUrl();
+		Map<String,String> course = jedisCache.getHMValue(REG_KEY, "course");	
+    	return course.get("fileUrl");
 	}
 	
 
+	/**
+	 * load resource from database
+	 * @param key
+	 * @return
+	 */
 	@Override
-	public Object loadCacheObject(String key)  {
+	public Map<String, String> loadDBMapObject(String key)  {
 		if (key.equals(REG_KEY))
 		{
-			Resource resource = new Resource(courseDAO.getCourseMetaObject());
-			localCache.entryVerUp(key, resource.getVersion());
-
-			logger.info("key ["+key+"] loaded from database");			
-			return courseDAO.getCourseMetaObject();	
+			Course course = courseDAO.getCourseMetaObject();		
+			logger.info("key ["+key+"] loaded from database");
+			
+			Map<String, String> hmap = new HashMap<String, String>();
+			hmap.put("metaKey", course.getMd5());
+			hmap.put("fileUrl", course.getUrl());
+			
+			return hmap;	
 		}
 		return null;
 	}

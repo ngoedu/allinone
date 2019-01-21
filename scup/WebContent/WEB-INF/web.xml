@@ -71,14 +71,15 @@
 	</filter-mapping>
 	
 	
-	
+	<!-- 
 	<filter-mapping>
 		<filter-name>javamelody</filter-name>
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ASYNC</dispatcher>
 	</filter-mapping>
-
+ 	-->
+ 
 	<servlet>
 		<servlet-name>spring-dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -91,8 +92,11 @@
 
 	<servlet-mapping>
 		<servlet-name>spring-dispatcher</servlet-name>
-		<url-pattern>/json/cmeta</url-pattern>	
-		<url-pattern>/ants/cache</url-pattern>
+		<url-pattern>/json/supg</url-pattern>	
+		<url-pattern>/admin/aupload</url-pattern>
+		<url-pattern>/admin/aregist</url-pattern>
+		<url-pattern>/admin/cmupload</url-pattern>
+		<url-pattern>/admin/cmregist</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
@@ -109,6 +113,7 @@
 	   <web-resource-collection>
 	     <web-resource-name>NGO Text Script Manager interface</web-resource-name>
 	     <url-pattern>/ants/*</url-pattern>
+	     <url-pattern>/admin1/*</url-pattern>
 	     <url-pattern>/monitoring</url-pattern>    
 	   </web-resource-collection>
 	   <auth-constraint>

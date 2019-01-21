@@ -21,37 +21,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ngo.front.web.service.CourseService;
+import ngo.front.web.service.UpgradeService;
 
  
 /**
 	NGO Kids Math Resource request controller	 
  */
 @Controller
-public class CourseControler {
+public class UpgradeControler {
  
 	
 	private final Logger logger = Logger.getLogger(this.getClass());
 	
-	private final static String CMETA_FILE_PATH = "/cmeta/dat.js";
-	private final static String CPACK_FILE_PATH = "/cpack/";
-	
 	@Autowired
-    private CourseService courseService;
+    private UpgradeService upgradeService;
     
-    @RequestMapping(value = "/json/cmeta", method = RequestMethod.GET)
-    public ResponseEntity<String> request(HttpServletRequest request, HttpServletResponse response, @RequestParam("key") String key, @RequestParam("token") String token) {
+    @RequestMapping(value = "/json/supg", method = RequestMethod.GET)
+    public ResponseEntity<String> request(HttpServletRequest request, HttpServletResponse response, @RequestParam("packVer") String packVer, @RequestParam("token") String token) {
         try {
         	//validate token here
         	if (!isTokenValidated(token)) {      		
         		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("invalid request");
         	}
         	//get latest key of course meta info
-        	String courseMetaKey = courseService.getCourseMetaKey();
-        	if (key.equals(courseMetaKey)) {
+        	String serverPackVer = upgradeService.getUpgradePackVer();
+        	if (packVer.equals(serverPackVer)) {
         		return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
         	} else {
-        		String downloadFileUrl = courseService.getCourseMetaFileUrl();
-        		return ResponseEntity.ok(downloadFileUrl);
+        		String upgradeJson = upgradeService.getUpgradePackJson();
+        		return ResponseEntity.ok(upgradeJson);
         	}
         } catch (Exception e) {
         	logger.error(e.getMessage());

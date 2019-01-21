@@ -4,5 +4,6 @@
 <configuration>
 	<mappers>
 		<mapper resource="ngo/front/storage/orm/CourseMapper.xml" />
+		<mapper resource="ngo/front/storage/orm/UpgradeMapper.xml" />
 	</mappers>
 </configuration>

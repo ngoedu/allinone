@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ngo.front.storage.orm.UpgradeMapper">
+	
+	<!-- Pack -->
+	<select id="getUpgradePack" resultType="ngo.front.storage.entity.UpgradePack">
+		select packVer,cmetaKey,cmetaPath from upgrade_pack 
+	</select>
+
+	<update id="updateUpgradePack" parameterType="ngo.front.storage.entity.UpgradePack">
+        update upgrade_pack set packVer=packVer+1,cmetaKey=#{cmetaKey},cmetaPath=#{cmetaPath}
+    </update>
+    
+    <insert id="insertUpgradePack" parameterType="ngo.front.storage.entity.UpgradePack" >
+        insert into upgrade_pack(packVer,cmetaKey,cmetaPath) values(#{packVer},#{cmetaKey},#{cmetaPath})
+    </insert>
+    
+    <!-- CONF -->
+    <select id="getUpgradeConf" resultType="ngo.front.storage.entity.UpgradeConf">
+		select upgradeSite,dllJarUpgradeSite,upgradeInterval from upgrade_conf 
+	</select>
+    
+    <update id="updateUpgradeConf" parameterType="ngo.front.storage.entity.UpgradeConf">
+        update upgrade_conf set upgradeSite=#{upgradeSite},dllJarUpgradeSite=#{dllJarUpgradeSite},upgradeInterval=#{upgradeInterval}
+    </update>
+    
+    <insert id="insertUpgradeConf" parameterType="ngo.front.storage.entity.UpgradeConf">
+        insert into upgrade_conf(upgradeSite,dllJarUpgradeSite,upgradeInterval) values(#{upgradeSite},#{dllJarUpgradeSite},#{upgradeInterval})
+    </insert>
+    
+    <!-- Jars & Dlls -->
+    <select id="getUpgradeDlls" resultType="ngo.front.storage.entity.UpgradeResource">
+		select id,name,type,version,hashCode from upgrade_resource where type='DLL' 
+	</select>
+	<select id="getUpgradeJars" resultType="ngo.front.storage.entity.UpgradeResource">
+		select id,name,type,version,hashCode from upgrade_resource where type='JAR' 
+	</select>
+	
+    
+    
+</mapper>
